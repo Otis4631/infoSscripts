@@ -9,9 +9,14 @@ def Hydra():
         protocol=" asterisk"
     if len(password)==0:
         password=" -P password"
+    else:
+    	password=' -p '+password
+
     if len(username)==0:
-        username=" -L users" 
-    cmd="hydra -M ip"+username+password+' '+protocol+" -t 20 "+" -o report"
+        username=" -L users"
+    else:
+    	username=' -l '+username 
+    cmd="hydra -M ip"+username+password+' '+protocol+" -o report"
     if len((os.popen("whereis hydra")).read())<=8:
     	version=(os.popen("cat /etc/issue")).read()
     	if len(re.findall("Debian|Ubuntu|Xandros|Linspire",version))!=0:
@@ -22,9 +27,8 @@ def Hydra():
     	else :
     		print "*********Unkown Linux System,please install hydra by yourself********"
     		exit(1)
-    else :
-    	os.system(cmd)
-    	print "scan has finished ,report has been created"
+    os.system(cmd)
+    print "scan has finished ,report has been created"
 
 def creatRanIP(case):
 	if case==0:
@@ -73,12 +77,10 @@ def creatRanIP(case):
 if os.geteuid() != 0:
     print "This program must be run as root. Aborting."
     exit(1)
-'''
 case=raw_input("enter the size of IP:")
 case=int(case)
 while not (case>=0 and case<=4):
 	case=raw_input("Input error,please try again:")
 	case=int(case)
 creatRanIP(case)
-'''
 Hydra()
